@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickUP : MonoBehaviour
 {
     public Vector3 mTumble;
+    public GameController controller;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +22,9 @@ public class PickUP : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("On trigger Enter!!");
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
+            controller.AddScore(1);
         }
     }
 }
