@@ -5,6 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody mRB;
+
+    public Transform BoltPos;
+    public GameObject BoltPrefab;
+
     public float Speed;
     public float Tilt;
 
@@ -32,5 +36,11 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, MinX, MaxX),
                                           0,
                                          Mathf.Clamp(transform.position.z, MinZ, MaxZ));
+
+        if (Input.GetButton("Fire1"))
+        {
+            GameObject newBolt = Instantiate(BoltPrefab);
+            newBolt.transform.position = BoltPos.position;
+        }
     }
 }
