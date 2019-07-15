@@ -17,9 +17,14 @@ public class Player : MonoBehaviour
     public float MinZ;
     public float MaxZ;
 
+    public float FireRate;
+    private float currentFireTimer;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        currentFireTimer = 0;
         mRB = GetComponent<Rigidbody>();
     }
 
@@ -37,10 +42,13 @@ public class Player : MonoBehaviour
                                           0,
                                          Mathf.Clamp(transform.position.z, MinZ, MaxZ));
 
-        if (Input.GetButton("Fire1"))
+        currentFireTimer = currentFireTimer - Time.deltaTime;
+
+        if (Input.GetButton("Fire1") && currentFireTimer <= 0)
         {
             GameObject newBolt = Instantiate(BoltPrefab);
             newBolt.transform.position = BoltPos.position;
+            currentFireTimer = FireRate;
         }
     }
 }
