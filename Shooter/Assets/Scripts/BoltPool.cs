@@ -23,5 +23,8 @@ public class BoltPool : MonoBehaviour
                 return Pool[i];
             }
         }
+        Bolt newObj = Instantiate(Prefab);
+        Pool.Add(newObj);
+        return newObj;
     }
 }

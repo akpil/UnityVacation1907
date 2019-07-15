@@ -13,12 +13,6 @@ public class Bolt : MonoBehaviour
         mRB.velocity = transform.forward * Speed;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
     }
