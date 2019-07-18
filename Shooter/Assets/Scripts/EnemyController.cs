@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     private Rigidbody mRB;
     public Transform BoltPos;
     public BoltPool pool;
+    private Transform mPlayerTransform;
 
     void Awake()
     {
@@ -16,6 +17,9 @@ public class EnemyController : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(AutoFire());
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        mPlayerTransform = player.transform;
+        StartCoroutine(SideMovement());
     }
 
     private IEnumerator AutoFire()
@@ -25,6 +29,18 @@ public class EnemyController : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.7f, 1.2f));
             Bolt bolt = pool.GetFromPool();
             bolt.transform.position = BoltPos.position;
+        }
+    }
+
+    private IEnumerator SideMovement()
+    {
+        while (true)
+        {
+            float playerX = mPlayerTransform.position.x;
+            Vector3 currentVel = mRB.velocity;
+            currentVel.x = playerX - currentVel.x;
+            mRB.velocity = currentVel;
+            yield return new WaitForSeconds(.5f);
         }
     }
 
