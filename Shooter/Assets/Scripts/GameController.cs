@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public EnemyPool enemyPool;
     public AsteroidPool asteroidPool;
     public float SpawnZPos;
     public float SpawnXMin;
     public float SpawnXMax;
     public int AstSpawnCount;
+    public int EnemySpawnCount;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,14 @@ public class GameController : MonoBehaviour
             {
                 AsteroidMovement ast = asteroidPool.GetFromPool(Random.Range(0, 3));
                 ast.transform.position = new Vector3(Random.Range(SpawnXMin, SpawnXMax),
+                                                     0,
+                                                     SpawnZPos);
+                yield return new WaitForSeconds(.4f);
+            }
+            for (int i = 0; i < EnemySpawnCount; i++)
+            {
+                EnemyController enemy = enemyPool.GetFromPool();
+                enemy.transform.position = new Vector3(Random.Range(SpawnXMin, SpawnXMax),
                                                      0,
                                                      SpawnZPos);
                 yield return new WaitForSeconds(.4f);

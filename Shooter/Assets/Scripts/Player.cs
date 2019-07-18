@@ -51,4 +51,13 @@ public class Player : MonoBehaviour
             currentFireTimer = FireRate;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            gameObject.SetActive(false);
+            Debug.Log("GameOver");
+        }
+    }
 }
