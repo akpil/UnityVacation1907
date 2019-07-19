@@ -11,11 +11,17 @@ public class GameController : MonoBehaviour
     public float SpawnXMax;
     public int AstSpawnCount;
     public int EnemySpawnCount;
+    public int Score;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SpawnHazard());
+    }
+
+    public void AddScore(int amount)
+    {
+        Score = Score + amount;
     }
 
     private IEnumerator SpawnHazard()

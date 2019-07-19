@@ -19,13 +19,14 @@ public class Player : MonoBehaviour
 
     public float FireRate;
     private float currentFireTimer;
-
+    private EffectPool effect;
 
     // Start is called before the first frame update
     void Start()
     {
         currentFireTimer = 0;
         mRB = GetComponent<Rigidbody>();
+        effect = GameObject.FindGameObjectWithTag("EffectPool").GetComponent<EffectPool>();
     }
 
     // Update is called once per frame
@@ -57,7 +58,13 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
-            Debug.Log("GameOver");
         }
+    }
+
+    private void OnDisable()
+    {
+        Timer newEffect = effect.GetFromPool((int)eEffectType.PlayerExp);
+        newEffect.transform.position = transform.position;
+        Debug.Log("GameOver");
     }
 }

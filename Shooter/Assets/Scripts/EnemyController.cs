@@ -9,11 +9,14 @@ public class EnemyController : MonoBehaviour
     public float Speed;
     private BoltPool mPool;
     private Transform mPlayerTransform;
+    private EffectPool effect;
 
     void Awake()
     {
         mRB = GetComponent<Rigidbody>();
         mRB.velocity = Vector3.back * Speed;
+        GameObject effectObj = GameObject.FindGameObjectWithTag("EffectPool");
+        effect = effectObj.GetComponent<EffectPool>();
     }
 
     private void OnEnable()
@@ -65,7 +68,8 @@ public class EnemyController : MonoBehaviour
             other.gameObject.CompareTag("Player"))
         {
             //점수 올리기
-            //이펙트
+            Timer newEffect = effect.GetFromPool((int)eEffectType.EnemyExp);
+            newEffect.transform.position = transform.position;
             //사운드
             other.gameObject.SetActive(false);
             gameObject.SetActive(false);
