@@ -20,7 +20,14 @@ public class EnemyController : MonoBehaviour
     {
         StartCoroutine(AutoFire());
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        mPlayerTransform = player.transform;
+        if (player != null)
+        {
+            mPlayerTransform = player.transform;
+        }
+        else
+        {
+            mPlayerTransform = transform;
+        }
         StartCoroutine(SideMovement());
     }
 
