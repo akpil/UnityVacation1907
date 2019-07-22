@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public SoundController soundControl;
     public EnemyPool enemyPool;
     public AsteroidPool asteroidPool;
     public float SpawnZPos;
@@ -17,6 +18,11 @@ public class GameController : MonoBehaviour
     void Start()
     {
         StartCoroutine(SpawnHazard());
+    }
+
+    public SoundController GetSoundController()
+    {
+        return soundControl;
     }
 
     public void AddScore(int amount)

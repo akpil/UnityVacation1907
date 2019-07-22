@@ -8,6 +8,7 @@ public class AsteroidMovement : MonoBehaviour
     public float Speed;
     private EffectPool effect;
     private GameController gameController;
+    private SoundController soundController;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class AsteroidMovement : MonoBehaviour
         effect = effectObj.GetComponent<EffectPool>();
         GameObject controller = GameObject.FindGameObjectWithTag("GameController");
         gameController = controller.GetComponent<GameController>();
+        soundController = gameController.GetSoundController();
     }
     private void OnEnable()
     {
@@ -36,7 +38,7 @@ public class AsteroidMovement : MonoBehaviour
             gameController.AddScore(1);
             Timer newEffect = effect.GetFromPool((int)eEffectType.AsteroidExp);
             newEffect.transform.position = transform.position;
-            //사운드
+            soundController.PlayEffectSound((int)eEffectSoundType.ExpAst);
             other.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }

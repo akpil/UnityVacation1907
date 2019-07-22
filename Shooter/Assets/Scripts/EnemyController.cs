@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
     private BoltPool mPool;
     private Transform mPlayerTransform;
     private EffectPool effect;
+    private GameController gameController;
+    private SoundController soundController;
 
     void Awake()
     {
@@ -17,6 +19,9 @@ public class EnemyController : MonoBehaviour
         mRB.velocity = Vector3.back * Speed;
         GameObject effectObj = GameObject.FindGameObjectWithTag("EffectPool");
         effect = effectObj.GetComponent<EffectPool>();
+        GameObject controller = GameObject.FindGameObjectWithTag("GameController");
+        gameController = controller.GetComponent<GameController>();
+        soundController = gameController.GetSoundController();
     }
 
     private void OnEnable()
@@ -46,6 +51,7 @@ public class EnemyController : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.7f, 1.2f));
             Bolt bolt = mPool.GetFromPool();
             bolt.transform.position = BoltPos.position;
+            soundController.PlayEffectSound((int)eEffectSoundType.FireEnemy);
         }
     }
 
@@ -67,10 +73,10 @@ public class EnemyController : MonoBehaviour
         if (other.gameObject.CompareTag("Bolt") ||
             other.gameObject.CompareTag("Player"))
         {
-            //점수 올리기
+            gameController.AddScore(1);
             Timer newEffect = effect.GetFromPool((int)eEffectType.EnemyExp);
             newEffect.transform.position = transform.position;
-            //사운드
+            soundController.PlayEffectSound((int)eEffectSoundType.ExpEnemy);
             other.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
