@@ -5,6 +5,15 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public SoundController soundControl;
+    public UIController UIControl;
+
+    public BGScroller[] BGArr;
+    public float BGScrollSpeed;
+
+    public Player player;
+
+    private bool mbGameOver;
+
     public EnemyPool enemyPool;
     public AsteroidPool asteroidPool;
     public float SpawnZPos;
@@ -13,11 +22,20 @@ public class GameController : MonoBehaviour
     public int AstSpawnCount;
     public int EnemySpawnCount;
     public int Score;
-
+    private Coroutine hazardRoutine;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnHazard());
+        hazardRoutine = StartCoroutine(SpawnHazard());
+
+        for (int i = 0; i < BGArr.Length; i++)
+        {
+            BGArr[i].SetSpeed(BGScrollSpeed);
+        }
+        mbGameOver = false;
+        UIControl.ShowStatus("");
+        Score = 0;
+        UIControl.ShowScore(Score);
     }
 
     public SoundController GetSoundController()
@@ -28,6 +46,33 @@ public class GameController : MonoBehaviour
     public void AddScore(int amount)
     {
         Score = Score + amount;
+        UIControl.ShowScore(Score);
+    }
+
+    public void GameOver()
+    {
+        UIControl.ShowStatus("Game Over..");
+        for (int i = 0; i < BGArr.Length; i++)
+        {
+            BGArr[i].SetSpeed(0);
+        }
+        StopCoroutine(hazardRoutine);
+        mbGameOver = true;
+    }
+
+    public void RestartGame()
+    {
+        UIControl.ShowStatus("");
+        Score = 0;
+        UIControl.ShowScore(Score);
+        for (int i = 0; i < BGArr.Length; i++)
+        {
+            BGArr[i].SetSpeed(BGScrollSpeed);
+        }
+        hazardRoutine = StartCoroutine(SpawnHazard());
+        player.transform.position = Vector3.zero;
+        player.gameObject.SetActive(true);
+        mbGameOver = false;
     }
 
     private IEnumerator SpawnHazard()
@@ -95,6 +140,9 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R) && mbGameOver)
+        {
+            RestartGame();
+        }
     }
 }

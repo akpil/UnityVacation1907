@@ -5,18 +5,15 @@ using UnityEngine;
 public class BGScroller : MonoBehaviour
 {
     private Rigidbody mRB;
-    public float Speed;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mRB = GetComponent<Rigidbody>();
-        mRB.velocity = Vector3.back * Speed;
     }
 
     public void SetSpeed(float inputSpeed)
     {
-        Speed = inputSpeed;
-        mRB.velocity = Vector3.back * Speed;
+        mRB.velocity = Vector3.back * inputSpeed;
     }
 
     private void OnTriggerEnter(Collider other)

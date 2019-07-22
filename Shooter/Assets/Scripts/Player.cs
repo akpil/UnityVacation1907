@@ -72,6 +72,6 @@ public class Player : MonoBehaviour
         Timer newEffect = effect.GetFromPool((int)eEffectType.PlayerExp);
         newEffect.transform.position = transform.position;
         soundController.PlayEffectSound((int)eEffectSoundType.ExpPlayer);
-        Debug.Log("GameOver");
+        gameController.GameOver();
     }
 }
