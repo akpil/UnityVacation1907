@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour
     private GameController gameController;
     private SoundController soundController;
 
+    public int MaxHP;
+    private int CurrentHP;
+
     void Awake()
     {
         mRB = GetComponent<Rigidbody>();
@@ -26,6 +29,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
+        CurrentHP = MaxHP;
         StartCoroutine(AutoFire());
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -68,17 +72,31 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void EnterBomb(int damage)
     {
-        if (other.gameObject.CompareTag("Bolt") ||
-            other.gameObject.CompareTag("Player"))
+        Hit(damage);
+    }
+
+    private void Hit(int damage)
+    {
+        CurrentHP -= damage;
+        if (CurrentHP <= 0)
         {
             gameController.AddScore(1);
             Timer newEffect = effect.GetFromPool((int)eEffectType.EnemyExp);
             newEffect.transform.position = transform.position;
             soundController.PlayEffectSound((int)eEffectSoundType.ExpEnemy);
-            other.gameObject.SetActive(false);
             gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Bolt") ||
+            other.gameObject.CompareTag("Player"))
+        {
+            Hit(1);
+            other.gameObject.SetActive(false);
         }
     }
 }

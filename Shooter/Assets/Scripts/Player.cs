@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     private Rigidbody mRB;
 
+    public Bomb bomb;
+
     public Transform BoltPos;
     public BoltPool boltPool;
 
@@ -19,6 +21,11 @@ public class Player : MonoBehaviour
 
     public float FireRate;
     private float currentFireTimer;
+
+    public GameObject ChargingObj;
+    public float ChargeMaxValue;
+    private float currentChargeValue;
+
     private EffectPool effect;
     private GameController gameController;
     private SoundController soundController;
@@ -27,6 +34,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         currentFireTimer = 0;
+        currentChargeValue = 0;
         mRB = GetComponent<Rigidbody>();
         effect = GameObject.FindGameObjectWithTag("EffectPool").GetComponent<EffectPool>();
         GameObject controlObj = GameObject.FindGameObjectWithTag("GameController");
@@ -50,12 +58,45 @@ public class Player : MonoBehaviour
 
         currentFireTimer = currentFireTimer - Time.deltaTime;
 
-        if (Input.GetButton("Fire1") && currentFireTimer <= 0)
+        if (Input.GetButton("Fire3"))
+        {
+            ChargingObj.SetActive(true);
+            currentChargeValue += Time.deltaTime;
+        }
+        else if (Input.GetButtonUp("Fire3"))
+        {
+            if (currentChargeValue >= ChargeMaxValue)
+            {
+                StartCoroutine(ChargingFire(20));
+            }
+            currentChargeValue = 0;
+            ChargingObj.SetActive(false);
+        }
+        else if (Input.GetButton("Fire1") && currentFireTimer <= 0)
         {
             Bolt newBolt = boltPool.GetFromPool();
             newBolt.transform.position = BoltPos.position;
             currentFireTimer = FireRate;
             soundController.PlayEffectSound((int)eEffectSoundType.FirePlayer);
+        }
+
+        if (Input.GetButton("Fire2") && !bomb.gameObject.activeInHierarchy)
+        {
+            bomb.transform.position = BoltPos.position;
+            bomb.gameObject.SetActive(true);
+        }
+    }
+
+    private IEnumerator ChargingFire(int boltCount)
+    {
+        int count = boltCount;
+        while (count > 0)
+        {
+            Bolt newBolt = boltPool.GetFromPool();
+            newBolt.transform.position = BoltPos.position;
+            soundController.PlayEffectSound((int)eEffectSoundType.FirePlayer);
+            count--;
+            yield return new WaitForFixedUpdate();
         }
     }
 
