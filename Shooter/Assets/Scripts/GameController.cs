@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hazardRoutine = StartCoroutine(SpawnHazard());
+        //hazardRoutine = StartCoroutine(SpawnHazard());
 
         for (int i = 0; i < BGArr.Length; i++)
         {
