@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
 
     private bool mbGameOver;
 
+    private bool mbBossAlive;
+    public BossController boss;
     public EnemyPool enemyPool;
     public AsteroidPool asteroidPool;
     public float SpawnZPos;
@@ -26,7 +28,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //hazardRoutine = StartCoroutine(SpawnHazard());
+        hazardRoutine = StartCoroutine(SpawnHazard());
 
         for (int i = 0; i < BGArr.Length; i++)
         {
@@ -130,11 +132,22 @@ public class GameController : MonoBehaviour
             }
             else
             {
+                mbBossAlive = true;
+                boss.gameObject.SetActive(true);
+                while (mbBossAlive)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                }
                 currentAstCount = AstSpawnCount;
                 currentEnemyCount = EnemySpawnCount;
                 yield return new WaitForSeconds(3);
             }
         }
+    }
+
+    public void ClearBoss()
+    {
+        mbBossAlive = false;
     }
 
     // Update is called once per frame
