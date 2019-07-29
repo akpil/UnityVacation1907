@@ -5,12 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Animator mAnim;
-    public int WalkHash;
     // Start is called before the first frame update
     void Start()
     {
         mAnim = GetComponent<Animator>();
-        WalkHash = Animator.StringToHash("IsWalk");
     }
 
     // Update is called once per frame
@@ -21,17 +19,25 @@ public class Player : MonoBehaviour
         if (horizontal > 0)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            mAnim.SetBool(WalkHash, true);
+            mAnim.SetBool(AnimHash.Walk, true);
         }
         else if (horizontal < 0)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
-            mAnim.SetBool(WalkHash, true);
+            mAnim.SetBool(AnimHash.Walk, true);
         }
         else
         {
-            mAnim.SetBool(WalkHash, false);
+            mAnim.SetBool(AnimHash.Walk, false);
         }
-        
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            mAnim.SetBool(AnimHash.Melee, true);
+        }
+        if (Input.GetButtonUp("Fire1"))
+        {
+            mAnim.SetBool(AnimHash.Melee, false);
+        }
     }
 }
