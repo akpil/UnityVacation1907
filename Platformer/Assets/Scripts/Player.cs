@@ -55,4 +55,12 @@ public class Player : MonoBehaviour
             mAnim.SetBool(AnimHash.Melee, false);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") && collision.enabled)
+        {
+            mbGround = true;
+        }
+    }
 }
