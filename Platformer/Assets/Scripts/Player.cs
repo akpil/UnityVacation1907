@@ -11,12 +11,18 @@ public class Player : MonoBehaviour
 
     private bool mbGround;
 
+    public AttackArea attackArea;
+    public int AttackPower;
+    public string TargetName;
+
     // Start is called before the first frame update
     void Start()
     {
         mAnim = GetComponent<Animator>();
         mRB2D = GetComponent<Rigidbody2D>();
         mbGround = true;
+        attackArea.SetTargetTag(TargetName);
+        attackArea.SetDamage(AttackPower);
     }
 
     // Update is called once per frame

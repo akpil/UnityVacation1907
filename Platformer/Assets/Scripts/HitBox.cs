@@ -15,6 +15,7 @@ public class HitBox : MonoBehaviour
 
     public void Hit(int value)
     {
+        Debug.Log(value);
         currentHitCount++;
         if (currentHitCount == TargetHitCount)
         {
