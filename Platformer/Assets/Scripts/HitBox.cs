@@ -7,12 +7,15 @@ public class HitBox : MonoBehaviour
     public int TargetHitCount;
     public int currentHitCount;
     private BoxCollider2D mCollider;
+    private GameController mGameController;
 
     // Start is called before the first frame update
     void Start()
     {
         currentHitCount = 0;
         mCollider = GetComponent<BoxCollider2D>();
+        GameObject obj = GameObject.FindGameObjectWithTag("GameController");
+        mGameController = obj.GetComponent<GameController>();
     }
 
     public void Hit(int value)
@@ -30,7 +33,7 @@ public class HitBox : MonoBehaviour
         yield return new WaitForSeconds(5);
         if (currentHitCount == TargetHitCount)
         {
-            Debug.Log("to NextStage");
+            mGameController.AddStageNumber();
             mCollider.enabled = false;
         }
     }
