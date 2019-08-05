@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - HitBox
+  - Wall
   layers:
   - Default
   - TransparentFX

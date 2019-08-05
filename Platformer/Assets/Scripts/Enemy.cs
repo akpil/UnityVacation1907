@@ -18,9 +18,12 @@ public class Enemy : MonoBehaviour
 
     public float MoveSpeed;
 
-    private eEnemyState mState;
+    public eEnemyState mState;
 
     private Transform mTarget;
+    private bool mAttackFlag;
+
+    private Coroutine mStateShiftRoutine;
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +35,24 @@ public class Enemy : MonoBehaviour
         StartCoroutine(AI());
     }
 
+    public void EnterAttackArea(bool isEnter)
+    {
+        mAttackFlag = isEnter;
+        if (mAttackFlag)
+        {
+            mState = eEnemyState.Attack;
+        }
+    }
+
     public void FinishAttack()
     {
         mAnim.SetBool(AnimHash.Melee, false);
+
+        if (mAttackFlag && mTarget != null)
+        {
+            mTarget.gameObject.SendMessage("Hit", 1, SendMessageOptions.DontRequireReceiver);
+        }
+
         Debug.Log("Attack Finish");
     }
 
@@ -51,6 +69,28 @@ public class Enemy : MonoBehaviour
         // shift to Move
     }
 
+    private IEnumerator ShiftState(float waitTime, eEnemyState state)
+    {
+        yield return new WaitForSeconds(waitTime);
+        mState = state;
+        mStateShiftRoutine = null;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision " + collision.gameObject.tag);
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            Debug.Log("sasssssss");
+            mState = eEnemyState.Idle;
+            if (mStateShiftRoutine != null)
+            {
+                StopCoroutine(mStateShiftRoutine);
+                mStateShiftRoutine = null;
+            }
+        }
+    }
+
     private IEnumerator AI()
     {
         while (true)
@@ -58,13 +98,19 @@ public class Enemy : MonoBehaviour
             switch (mState)
             {
                 case eEnemyState.Idle:
-                    if (transform.rotation.y > 90)
+                    if (mStateShiftRoutine == null)
                     {
-                        transform.rotation = Quaternion.Euler(0, 0, 0);
-                    }
-                    else
-                    {
-                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                        mAnim.SetBool(AnimHash.Walk, false);
+                        mRB2D.velocity = Vector2.zero;
+                        if (transform.rotation.y < 0)
+                        {
+                            transform.rotation = Quaternion.Euler(0, 0, 0);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.Euler(0, 180, 0);
+                        }
+                        mStateShiftRoutine = StartCoroutine(ShiftState(2, eEnemyState.Move));
                     }
                     break;
                 case eEnemyState.Move:

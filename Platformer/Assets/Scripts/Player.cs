@@ -62,6 +62,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Hit(int damage)
+    {
+        Debug.Log(damage);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground") && collision.enabled)
