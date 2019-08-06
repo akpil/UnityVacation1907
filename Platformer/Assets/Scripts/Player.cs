@@ -15,9 +15,13 @@ public class Player : MonoBehaviour
     public int AttackPower;
     public string TargetName;
 
+    public int MaxHP;
+    private int mCurrentHP;
+
     // Start is called before the first frame update
     void Start()
     {
+        mCurrentHP = MaxHP;
         mAnim = GetComponent<Animator>();
         mRB2D = GetComponent<Rigidbody2D>();
         mbGround = true;
@@ -65,6 +69,11 @@ public class Player : MonoBehaviour
     public void Hit(int damage)
     {
         Debug.Log(damage);
+        mCurrentHP = mCurrentHP - damage;
+        if (mCurrentHP <= 0)
+        {
+            mAnim.SetBool(AnimHash.Dead, true);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

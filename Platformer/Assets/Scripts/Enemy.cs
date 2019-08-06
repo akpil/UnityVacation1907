@@ -25,14 +25,27 @@ public class Enemy : MonoBehaviour
 
     private Coroutine mStateShiftRoutine;
 
+    public int MaxHP;
+    private int mCurrentHP;
+
     // Start is called before the first frame update
     void Start()
     {
+        mCurrentHP = MaxHP;
         mRB2D = GetComponent<Rigidbody2D>();
         mAnim = GetComponent<Animator>();
 
         mState = eEnemyState.Idle;
         StartCoroutine(AI());
+    }
+
+    public void Hit(int damage)
+    {
+        mCurrentHP = mCurrentHP - damage;
+        if (mCurrentHP <= 0)
+        {
+            mState = eEnemyState.Dead;
+        }
     }
 
     public void EnterAttackArea(bool isEnter)
@@ -134,7 +147,9 @@ public class Enemy : MonoBehaviour
                     mAnim.SetBool(AnimHash.Melee, true);
                     break;
                 case eEnemyState.Dead:
-
+                    mAnim.SetBool(AnimHash.Dead, true);
+                    mRB2D.velocity = Vector2.zero;
+                    // gain point 
                     break;
             }
             yield return new WaitForSeconds(0.2f);
