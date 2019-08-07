@@ -6,6 +6,9 @@ public class Player : MonoBehaviour
 {
     private Animator mAnim;
     private Rigidbody2D mRB2D;
+
+    public GaugeBar HPbar;
+
     public float Speed;
     public float JumpSpeed;
 
@@ -22,6 +25,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         mCurrentHP = MaxHP;
+        HPbar.ShowGauge(mCurrentHP, MaxHP);
+
         mAnim = GetComponent<Animator>();
         mRB2D = GetComponent<Rigidbody2D>();
         mbGround = true;
@@ -70,10 +75,14 @@ public class Player : MonoBehaviour
     {
         Debug.Log(damage);
         mCurrentHP = mCurrentHP - damage;
+        
         if (mCurrentHP <= 0)
         {
             mAnim.SetBool(AnimHash.Dead, true);
+            mCurrentHP = 0;
         }
+
+        HPbar.ShowGauge(mCurrentHP, MaxHP);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
