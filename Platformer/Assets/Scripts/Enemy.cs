@@ -13,6 +13,10 @@ public enum eEnemyState
 
 public class Enemy : MonoBehaviour
 {
+    public GaugeBarPool HPBarPool;
+    private GaugeBar HPBar;
+    public Transform HPBarPos;
+
     private Rigidbody2D mRB2D;
     private Animator mAnim;
 
@@ -31,12 +35,20 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        HPBar = HPBarPool.GetFromPool();
         mCurrentHP = MaxHP;
+        HPBar.ShowGauge(mCurrentHP, MaxHP);
+
         mRB2D = GetComponent<Rigidbody2D>();
         mAnim = GetComponent<Animator>();
 
         mState = eEnemyState.Idle;
         StartCoroutine(AI());
+    }
+
+    private void Update()
+    {
+        HPBar.transform.position = HPBarPos.position;
     }
 
     public void Hit(int damage)
