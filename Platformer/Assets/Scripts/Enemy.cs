@@ -103,10 +103,8 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision " + collision.gameObject.tag);
         if (collision.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("sasssssss");
             mState = eEnemyState.Idle;
             if (mStateShiftRoutine != null)
             {
